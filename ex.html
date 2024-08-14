@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <style style="display: block;">
+        h1 {
+            color: red;
+        }
+        
+        [editing] > [field] {
+            border: 2px dashed blue;
+            
+            label{
+                font-size: small;
+                display: inline;
+            }
+           
+        }
+        .user{
+            border: 1px solid black;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 10px;
+            width: 200px;
+        }
+        #logs{
+            background-color: black;
+            color: rgb(26, 218, 26);
+            padding: 10px;
+            margin: 10px;
+            text-shadow: 1px 1px 1px blue;
+
+            .clear{
+                cursor: pointer;
+                margin: 10px;
+                border-radius: 10%;
+                border: 1px solid rgb(113, 174, 40);
+                background-color: rgba(41, 58, 20, 0.722);
+                color: white;
+                opacity: 0;
+                transition: opacity 1s;
+            }
+
+            &:hover{
+                .clear{
+                opacity: 1;
+                }
+            }
+            .log, .error{
+                margin: 5px;
+                padding: 10px;
+                border: 1px solid rgb(113, 174, 40);
+                position: relative;
+                .x{
+                    color: red;
+                    cursor: pointer;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    border-radius: 10%;
+                    border: 1px solid rgb(113, 174, 40);
+                    background-color: rgba(41, 58, 20, 0.722);
+                    display: none;
+                }
+
+                .copy{
+                    color: green;
+                    cursor: pointer;
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                    border-radius: 10%;
+                    border: 1px solid rgb(113, 174, 40);
+                    background-color: rgba(41, 58, 20, 0.722);
+                    display: none;
+                }
+                &:hover{
+                    .x, .copy{
+                        display: block;
+                    }
+                }
+            }
+            input.eval{
+                border: 1px solid rgb(113, 174, 40);
+                margin: 5px;
+                padding: 5px;
+                width: 300px;
+                background-color: rgba(16, 99, 109, 0.722);
+                color: white;
+
+            }
+
+            .error{
+                color: red;
+            }
+
+        }
+    </style>
+</head>
+<body>
+    <div id="logs">
+        <div class="log-container"></div>
+        <input class="eval" type="text" onkeydown="if (event.key === 'Enter') log(eval(this.value))" list="possible-commands">
+        <button onclick="clearLogs()" class="clear">clear</button>
+    </div>
+
+    <datalist id="possible-commands">
+        
+    </datalist>
+
+
+
+
+
+    
+    <div class="users-container">
+
+        <div class="user" ondrag="">
+            <h2 field="name">John</h2>
+            <p field="age">Age: 25</p>
+            <p field="email">Email: johndoe@example.com</p>
+            <p field="phone">Phone: 123-456-7890</p>
+            <p field="address">Address: 123 Main St</p>
+            <p field="website">Website: https://john.com</p>
+            <p field="socialMedia">Social Media: https://github.com/john</p>
+            <button onclick="startEditing(this)">start editing</button>
+        </div>
+        
+    </div>
+
+
+    <script>
+        const possibleCommandsDatalist = document.querySelector("#possible-commands")
+        Object.entries(window).forEach(([key, value]) => possibleCommandsDatalist.innerHTML += `<option value="${key}">${key}</option>`) // Object.entries(window)
+
+        const logContainer = document.querySelector(".log-container")
+
+        window.addEventListener("keydown", (event) => {
+            if (event.key === "`") {
+                event.preventDefault()
+                document.querySelector("input.eval").focus()
+            }
+        })
+
+
+
+
+        window.addEventListener("dblclick" , (event) => {
+            copyToClipboard(saveElement(event.target))
+        })
+
+
+        const jonHTML = document.querySelector(".user")
+
+        function startEditing(element) {
+            element.setAttribute("editing", "true")
+            element.querySelectorAll("[field]").forEach(child => {
+                child.contentEditable = "true";
+                const label = document.createElement("label")
+                label.innerHTML = /*html*/`enter the <strong>${child.getAttribute("field")}</strong> here: `
+                child.parentElement.insertBefore(label, child)
+            })
+        }
+
+        // startEditing(jonHTML)
+
+
+        window.addEventListener("click", (event) => {
+            if (event.target.classList.contains("copy")) {
+                copyToClipboard(event.target.parentElement.querySelector("span").textContent)
+                
+            }
+        })
+
+
+
+
+        function log(content){
+            console.log(typeof content)
+            const newContent = typeof content === "string" ? content : JSON.stringify(content)
+            logContainer.innerHTML += /*html*/` 
+            <div class="log"> 
+                <span class="content"></span>
+                <button class="x" onclick="this.parentElement.remove()">x</button>
+                <button class="copy">copy</button>
+            </div>`
+            logContainer.lastChild.contentEditable = "true"
+            logContainer.lastChild.querySelector(".content").textContent = newContent
+        } 
+
+
+        function clearLogs(){
+            logContainer.innerHTML = ""
+        }
+
+        window.onerror = function(message, source, lineno, colno, error) {
+            logContainer.innerHTML += /*html*/` <div class="error"> 
+                ${message}
+                <br>
+                <button class="x" onclick="this.parentElement.remove()">x</button>
+                </div>`
+        };
+
+
+
+
+
+// Function to copy text to clipboard
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text)
+        .then(() => console.log('Text copied to clipboard successfully!'))
+        .catch(err => console.error('Failed to copy text:', err));
+}
+
+let savedElementCounter=0;
+const savedElements = {}
+
+function saveElement(element) {
+    if (typeof element !== "object") throw new Error("element is not an object")
+    savedElements[savedElementCounter] = element
+    savedElementCounter++
+    const savedElementFinderString = `savedElements[${savedElementCounter - 1}]`
+    return savedElementFinderString
+}
+
+
+
+
+
+    </script>
+</body>
+</html>
