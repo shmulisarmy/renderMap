@@ -109,12 +109,15 @@ class RenderMap{
         this.map.set(key, item)
     }
     deleteChild(key){
-        console.log("deleting", key)
-        console.log(this.childMap)
-        console.log(this.childMap.get(key))
-        this.parentElement.removeChild(this.childMap.get(key))
-        this.childMap.delete(key)
-        this.map.delete(key)
+        if (confirm(`Are you sure you want to delete ${key} from the list?`)) {   
+            const child = this.childMap.get(key)
+            child.classList.add("deleting")
+            setTimeout(() => {
+                this.parentElement.removeChild(child)
+                this.childMap.delete(key)
+                this.map.delete(key)
+            }, 500)
+        }
     }
 }
 
