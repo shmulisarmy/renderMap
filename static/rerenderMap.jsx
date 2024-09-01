@@ -158,7 +158,9 @@ HTMLElement.prototype.component = function () {
     if (this.classList.contains("component")) {
         return this
     }
-    return this.closest(".component")
+    const closestComponent = this.closest(".component")
+    assert(closestComponent instanceof HTMLElement, "closest is not an HTMLElement")
+    return closestComponent
 }
 
 HTMLElement.prototype.parentContainer = function () {
@@ -175,6 +177,7 @@ HTMLElement.prototype.parentContainer = function () {
 
 HTMLElement.prototype.reset = function (key, value) {
     this.component().set(key, value)
+    assert(component instanceof HTMLElement, "component is not an HTMLElement")
 }
 
 HTMLElement.prototype.update = function (signalName, value) {
@@ -188,6 +191,7 @@ HTMLElement.prototype.update = function (signalName, value) {
 
 HTMLElement.prototype.delete = function () {
     const component = this.component()
+    assert(component instanceof HTMLElement, "component is not an HTMLElement")
     console.log(component)
     const key = component.key
     component.RenderMap.deleteChild(key)
