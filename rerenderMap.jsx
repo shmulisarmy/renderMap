@@ -19,17 +19,17 @@ class RenderMap{
         this.render()
         parentElement.renderType = "container-map"
         parentElement.RenderMap = this
+        parentElement.classList.add("container")
     }
     render(){
         // also rerender
         this.parentElement.innerHTML = ""
         this.map.forEach((item, key) => {
-            const newElement = this.createChildrenWith(item)
+            const newElement = this.createChildrenWith(key, item)
             newElement.rerenderer = this.createChildrenWith
             newElement.props = item
             newElement.classList.add("component")
             newElement.key = key
-            console.log("key", key, this)
             newElement.RenderMap = this
             this.childMap.set(key, newElement)
             this.parentElement.appendChild(newElement)
@@ -39,7 +39,7 @@ class RenderMap{
      * @param {any} item
      * */
     setChild(key, item){
-        const newElement = this.createChildrenWith(item)
+        const newElement = this.createChildrenWith(key, item)
         if (this.childMap.has(key)) {
             const oldElement = this.childMap.get(key)
             this.parentElement.replaceChild(newElement, oldElement)

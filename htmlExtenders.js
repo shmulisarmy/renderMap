@@ -19,7 +19,7 @@ HTMLElement.prototype.component = function () {
     return closestComponent
 }
 
-HTMLElement.prototype.parentContainer = function () {
+HTMLElement.prototype.container = function () {
     let returnElement;
     if (this.classList.contains("component")) {
         returnElement = this.parentElement
@@ -48,22 +48,18 @@ HTMLElement.prototype.update = function (signalName, value) {
 HTMLElement.prototype.delete = function () {
     const component = this.component()
     assert(component instanceof HTMLElement, "component is not an HTMLElement")
-    console.log(component)
     const key = component.key
     component.RenderMap.deleteChild(key)
 }
 
 HTMLElement.prototype.loadAllContainers = function () {
-    const allplaceholders = document.querySelectorAll(".placeholder")
+    const allplaceholders = this.querySelectorAll(".placeholder")
     for (const placeholder of allplaceholders) {
         const key = placeholder.id
-        console.log(key)
-        console.log(placeholder)
-        const actual_container = HTMLElements.get(key)
-        console.log({actual_container})
+        const newElement = HTMLElements.get(key)
         
-        placeholder.parentElement.replaceChild(actual_container, placeholder)
-        placeholder.loadAllContainers()
+        placeholder.parentElement.replaceChild(newElement, placeholder)
+        newElement.loadAllContainers()
     }
 }
 

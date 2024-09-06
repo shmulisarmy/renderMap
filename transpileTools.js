@@ -44,7 +44,7 @@ function stringClean(strings, args) {
         }
 
         if (args[i] instanceof Function) {
-            const functionKey = `functions[${functions.length}]()`;
+            const functionKey = `"functions[${functions.length}](this, event)"`;
             functions.push(args[i]);
             result += functionKey;
             continue

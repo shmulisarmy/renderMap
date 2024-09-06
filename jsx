@@ -39,7 +39,6 @@ const users = new Map([
 
 
 function User(user){
-    console.log('rendering', user)
     return html`
     <div class="user">
         <h2>${user.name}</h2>
@@ -50,7 +49,6 @@ function User(user){
         <p>Website: ${user.website}</p>
         <button onclick="this.set('name', 'john')">change name</button>
         <button onclick="this.delete()">delete</button>
-        <button onclick=${() => console.log("clicked", user)}>click me</button>
     </div>
     `
 }
@@ -62,7 +60,6 @@ function App(){
             /${CreateRenderGroup("user", users, User)}
         </main>
     `
-    console.log({h})
     return h
 }
 

@@ -10,7 +10,7 @@
     padding: 4px;
     margin: 4px;
     border-radius: 4px;
-    #task-container {
+    .container {
         background-color: black;
         padding: 10px;
         margin: 10px;

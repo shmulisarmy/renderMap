@@ -51,12 +51,12 @@ const tasks = new Map(
     ]
 )
 
-function Task(props) {
+function Task(taskName, props) {
     return html`
-    <div class="task">
+    <div class="task" draggable="true">
         <h2>${props.name}</h2>
         <p>${props.description}</p>
-        <button onclick="this.delete()">delete</button>
+        <button onclick=${(el, event) => el.component().RenderMap.setChild("new one", props)}>delete</button>
     </div>
     `
 }
@@ -64,22 +64,27 @@ function Task(props) {
 
 
 
-function TaskList(taskList) {
+function TaskList(taskListName, taskList) {
     const h =  html`
     <div class="TaskList">
-        /${CreateRenderGroup("task", taskList, Task)}
+        /${printAndDisplay(CreateRenderGroup(`task-${taskListName}`, taskList, Task))}
     </div>
     `
 
-    console.log(h)
     return h
 }
 
 
+function printAndDisplay(item) {
+
+    console.log(item)
+    return item
+}
+
 function App() {
     return html`
     <main id="tasks">
-        /${CreateRenderGroup("taskList", tasks, TaskList)}
+        /${printAndDisplay(CreateRenderGroup("taskList", tasks, TaskList))}
     </main>
     `
 }
