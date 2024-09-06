@@ -63,6 +63,7 @@ HTMLElement.prototype.loadAllContainers = function () {
         console.log({actual_container})
         
         placeholder.parentElement.replaceChild(actual_container, placeholder)
+        placeholder.loadAllContainers()
     }
 }
 

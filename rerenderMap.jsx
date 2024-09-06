@@ -9,6 +9,8 @@ class RenderMap{
      * @param {string} itemType example: user or post blog
      * */
     constructor(parentElement, map, createChildrenWith, itemType){
+        assert(map instanceof Map, `${map} is not a Map`)
+
         this.itemType = itemType
         this.parentElement = parentElement
         this.map = map

@@ -43,6 +43,13 @@ function stringClean(strings, args) {
             continue
         }
 
+        if (args[i] instanceof Function) {
+            const functionKey = `functions[${functions.length}]()`;
+            functions.push(args[i]);
+            result += functionKey;
+            continue
+        }
+
         if (i < args.length) {
             if (strings[i][strings[i].length - 1] == "/"){
                 result += args[i];
