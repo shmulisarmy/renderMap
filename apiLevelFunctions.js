@@ -18,12 +18,18 @@ function CreateRenderGroup(holding, data, createChildrenWith) {
 
 
 HTMLElement.prototype.morphe = function (TopLevelComponent) {
-    const allRenderGroups = this.querySelectorAll(".container")
-
-    for (const renderGroup of allRenderGroups) {
-        document.body.appendChild(renderGroup)
+    if (!document.contains(this)) {
+        throw new Error("this element has been removed from the dom")
     }
+    /**
+     * @type {HTMLElement} used for removing the render groups one at a time (but not all at once with querySelectorAll because we only want one layer (non recursive))
+     */
+    let RenderGroup;
 
+    while (RenderGroup = this.querySelector(".container")) {
+        document.body.appendChild(RenderGroup)
+        
+    }
 
     const newElement = TopLevelComponent()
     this.parentElement.replaceChild(newElement, this)
