@@ -35,6 +35,11 @@ class RenderMap{
             this.parentElement.appendChild(newElement)
         })
     }
+
+    rerender(){
+        this.render()
+        this.parentElement.loadAllContainers()
+    }
     /**
      * @param {any} item
      * */

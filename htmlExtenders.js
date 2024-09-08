@@ -1,6 +1,14 @@
 HTMLElement.prototype.rerender = function () {
-    const newElement = this.rerenderer(this.props)
-    this.parentElement.replaceChild(newElement, this)
+    if (this.classList.contains("container")) {
+        this.RenderMap.rerender()
+    } else if (this.classList.contains("component")) {       
+        const newElement = this.rerenderer(this.props)
+        this.parentElement.replaceChild(newElement, this)
+    } else {
+        const rerendererName = this.getAttribute("rerender-with")
+        const rerenderer = eval(rerendererName)
+        this.parentElement.replaceChild(rerenderer(), this)
+    }
 }
 
 HTMLElement.prototype.set = function (key, value) {

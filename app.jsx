@@ -67,7 +67,7 @@ function Task(taskName, props) {
 function TaskList(taskListName, taskList) {
     const h =  html`
     <div class="TaskList">
-        /${printAndDisplay(CreateRenderGroup(`task-${taskListName}`, taskList, Task))}
+        /${CreateRenderGroup(`task-${taskListName}`, taskList, Task)}
     </div>
     `
 
@@ -75,16 +75,10 @@ function TaskList(taskListName, taskList) {
 }
 
 
-function printAndDisplay(item) {
-
-    console.log(item)
-    return item
-}
-
 function App() {
     return html`
     <main id="tasks">
-        /${printAndDisplay(CreateRenderGroup("taskList", tasks, TaskList))}
+        /${CreateRenderGroup("taskList", tasks, TaskList)}
     </main>
     `
 }

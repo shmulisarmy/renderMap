@@ -37,6 +37,7 @@ function stringClean(strings, args) {
         } else {
             result += strings[i];
         }
+        
 
         if (args[i] instanceof HTMLElement) {
             const key = `element-${HTMLElements.size.toString()}`;
@@ -45,6 +46,7 @@ function stringClean(strings, args) {
             result += placeholderElement;
             continue
         }
+
 
         if (args[i] instanceof Function) {
             const functionKey = `"functions[${functions.length}](this, event)"`;
